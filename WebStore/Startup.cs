@@ -19,6 +19,7 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -30,13 +31,11 @@ namespace WebStore
 
             app.UseRouting();
 
-            var greeting = _configuration["greeting"];
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync(greeting);
+                    await context.Response.WriteAsync(_configuration["greeting"]);
                 });
             });
         }
