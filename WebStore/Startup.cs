@@ -29,14 +29,16 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync(_configuration["greeting"]);
-                });
+                endpoints.MapGet("/greeting", async context => await context.Response.WriteAsync(_configuration["greeting"]));
+                endpoints.MapControllerRoute(
+                    name:"Default",
+                    pattern:"{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
