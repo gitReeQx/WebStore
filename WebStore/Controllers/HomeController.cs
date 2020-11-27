@@ -15,7 +15,7 @@ namespace WebStore.Controllers
 
         public IActionResult Index()
         {
-            return Content(_configuration["controllerActionText"]);
+            return View();
         }
     }
 }
