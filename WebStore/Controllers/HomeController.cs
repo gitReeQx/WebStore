@@ -32,5 +32,15 @@ namespace WebStore.Controllers
             Employee employee = _employees.Find(Employee => Employee.Id == id);
             return View(employee);
         }
+
+        public IActionResult Error404() => View();
+        public IActionResult Blogs() => View();
+        public IActionResult BlogSingle() => View();
+        public IActionResult Cart() => View();
+        public IActionResult Checkout() => View();
+        public IActionResult ContactUs() => View();
+        public IActionResult Login() => View();
+        public IActionResult ProductDetails() => View();
+        public IActionResult Shop() => View();
     }
 }
