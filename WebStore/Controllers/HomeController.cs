@@ -20,10 +20,7 @@ namespace WebStore.Controllers
 
         public HomeController(IConfiguration configuration) => _configuration = configuration;
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         public IActionResult Employees()
         {
