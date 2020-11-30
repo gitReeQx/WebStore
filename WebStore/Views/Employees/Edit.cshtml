@@ -1,0 +1,43 @@
+﻿@model Employee
+
+<!DOCTYPE html>
+<div class="container">
+    <h3>Редактирование данных сотрудника</h3>
+
+    @using (Html.BeginForm("SaveChanges", "Employees", FormMethod.Post))
+    {
+        <fieldset>
+            @Html.HiddenFor(m => m.Id)
+            <p>
+                @Html.LabelFor(m => m.FirstName, "Имя")
+                <br />
+                @Html.EditorFor(m => m.FirstName)
+            </p>
+            <p>
+                @Html.LabelFor(m => m.LastName, "Фамилия")
+                <br />
+                @Html.EditorFor(m => m.LastName)
+
+            </p>
+            <p>
+                @Html.LabelFor(m => m.Patronymic, "Отчество")
+                <br />
+                @Html.EditorFor(m => m.Patronymic)
+
+            </p>
+            <p>
+                @Html.LabelFor(m => m.Age, "Возраст")
+                <br />
+                @Html.EditorFor(m => m.Age)
+            </p>
+            <div class="row">
+                <div class="col-xs-1">
+                    <p><a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-default">Отмена</a></p>
+                </div>
+                <div class="col-xs-1">
+                    <p><input type="submit" class="btn btn-info" value="Сохранить" /></p>
+                </div>
+            </div>
+        </fieldset>
+    }
+</div>
