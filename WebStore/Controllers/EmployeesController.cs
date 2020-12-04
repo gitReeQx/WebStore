@@ -13,9 +13,9 @@ namespace WebStore.Controllers
     {
         private List<Employee> employees;
 
-        public EmployeesController() => employees = TestData._employees;
+        public EmployeesController() => employees = TestData.Employees;
         //[Route("All")]
-        public IActionResult Index() => View(TestData._employees);
+        public IActionResult Index() => View(TestData.Employees);
         //[Route("Users/Details({id})")]
         public IActionResult Details(int id)
         {

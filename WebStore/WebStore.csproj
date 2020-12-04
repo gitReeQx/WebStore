@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\lib\" />
-    <Folder Include="Infrastructure\Services\" />
   </ItemGroup>
 
 </Project>
