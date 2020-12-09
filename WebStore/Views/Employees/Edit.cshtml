@@ -1,43 +1,50 @@
-﻿@model Employee
+﻿@model EmployeesViewModel
 
-<!DOCTYPE html>
+@{ 
+    ViewData["Title"] = $"Редактирование сотрудника id:{Model.Id}";
+}
 <div class="container">
-    <h3>Редактирование данных сотрудника</h3>
+    <h3>@ViewData["Title"]</h3>
 
-    @using (Html.BeginForm("SaveChanges", "Employees", FormMethod.Post))
-    {
-        <fieldset>
-            @Html.HiddenFor(m => m.Id)
-            <p>
-                @Html.LabelFor(m => m.FirstName, "Имя")
-                <br />
-                @Html.EditorFor(m => m.FirstName)
-            </p>
-            <p>
-                @Html.LabelFor(m => m.LastName, "Фамилия")
-                <br />
-                @Html.EditorFor(m => m.LastName)
+    <form asp-action="Edit">
+        <div class="row">
+            <div class="col-md-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="Id" class="hidden" />
 
-            </p>
-            <p>
-                @Html.LabelFor(m => m.Patronymic, "Отчество")
-                <br />
-                @Html.EditorFor(m => m.Patronymic)
-
-            </p>
-            <p>
-                @Html.LabelFor(m => m.Age, "Возраст")
-                <br />
-                @Html.EditorFor(m => m.Age)
-            </p>
-            <div class="row">
-                <div class="col-xs-1">
-                    <p><a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-default">Отмена</a></p>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
-                <div class="col-xs-1">
-                    <p><input type="submit" class="btn btn-info" value="Сохранить" /></p>
+
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Patronymic" class="control-label"></label>
+                    <input asp-for="Patronymic" class="form-control" />
+                    <span asp-validation-for="Patronymic" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Age" class="control-label"></label>
+                    <input asp-for="Age" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
                 </div>
             </div>
-        </fieldset>
-    }
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-xs-1">
+            <p><a asp-action="Index" class="btn btn-default">К списку</a></p>
+        </div>
+        <div class="col-xs-1">
+            <p><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">Сохранить</a></p>
+        </div>
+    </div>
+
 </div>
