@@ -33,13 +33,16 @@ namespace WebStore.Controllers
 
         #region Editing Employee
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
+            if (id is null)
+                return View(new EmployeesViewModel());
+
             if (id < 0)
             {
                 return BadRequest();
             }
-            var employee = employees.Get(id);
+            var employee = employees.Get((int)id);
             if (employee is null)
                 return NotFound();
 
@@ -68,8 +71,18 @@ namespace WebStore.Controllers
                 Age = _model.Age,
             };
 
+            if (employee.Id == 0)
+                employees.Add(employee);
+            else
             employees.Update(employee);
             return RedirectToAction("Index");
+        }
+        #endregion
+
+        #region Create Employee
+        public IActionResult Create()
+        {
+            return View("Edit", new EmployeesViewModel());
         }
         #endregion
 
@@ -95,7 +108,7 @@ namespace WebStore.Controllers
             });
         }
         [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirm(int id)
         {
             employees.Delete(id);
             return RedirectToAction("Index");

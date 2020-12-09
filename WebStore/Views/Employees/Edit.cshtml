@@ -37,14 +37,16 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-xs-1">
+                <p><a asp-action="Index" class="btn btn-default">К списку</a></p>
+            </div>
+            <div class="col-xs-1">
+                <input type="submit" value="Сохранить" class="btn btn-danger" /><a asp-action="Edit"></a>
+            </div>
+        </div>
+        
     </form>
-    <div class="row">
-        <div class="col-xs-1">
-            <p><a asp-action="Index" class="btn btn-default">К списку</a></p>
-        </div>
-        <div class="col-xs-1">
-            <p><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">Сохранить</a></p>
-        </div>
-    </div>
+    
 
 </div>
