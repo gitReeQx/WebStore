@@ -23,6 +23,7 @@ namespace WebStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
+            services.AddTransient<IProductData, InMemoryProductData>();
 
             services
                 .AddControllersWithViews(opt =>
