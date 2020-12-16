@@ -5,13 +5,11 @@ using WebStore.Domain.Entities.Base.Interface;
 
 namespace WebStore.ViewModels
 {
-    public class ProductViewModel : INamedEntity, IOrderedEntity
+    public class ProductViewModel : INamedEntity
     {
         public string Name { get; set; }
 
         public int Id { get; set; }
-
-        public int Order { get; set; }
 
         public string ImageUrl;
 
