@@ -17,7 +17,7 @@ namespace WebStore.Components
         // по умолчанию берется представление с именем Default
         public IViewComponentResult Invoke()
         {
-            var sections = productData.GetSection().ToArray();
+            var sections = productData.GetSections().ToArray();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
 
