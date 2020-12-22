@@ -20,6 +20,7 @@ namespace WebStore.Controllers
             signInManager = SignInManager;
         }
 
+        #region Registration
         public IActionResult Register() => View(new RegisterUserViewModel());
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -47,5 +48,47 @@ namespace WebStore.Controllers
 
             return View(Model);
         }
+        #endregion
+
+        #region Login
+        public IActionResult Login(string ReturnURL) => View(new LoginViewModel { ReturnURL = ReturnURL});
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel Model)
+        {
+            if (!ModelState.IsValid) return View(Model);
+
+            var login_result = await signInManager.PasswordSignInAsync(
+                Model.UserName,
+                Model.Password,
+                Model.RememberMe,
+#if DEBUG
+                false
+#else
+                true
+#endif
+                );
+
+            if (login_result.Succeeded)
+            {
+                if (Url.IsLocalUrl(Model.ReturnURL))
+                    return Redirect(Model.ReturnURL);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", "Неверные данные");
+
+            return View(Model);
+        }
+        #endregion
+
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied() => View();
     }
 }
