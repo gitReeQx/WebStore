@@ -19,12 +19,12 @@ namespace WebStore.Controllers
 
         public IActionResult Employees()
         {
-            return View(TestData._employees);
+            return View(TestData.Employees);
         }
 
         public IActionResult Employee(int id)
         {
-            Employee employee = TestData._employees.Find(Employee => Employee.Id == id);
+            Employee employee = TestData.Employees.Find(Employee => Employee.Id == id);
             return View(employee);
         }
 

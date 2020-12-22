@@ -1,0 +1,23 @@
+﻿@model EmployeesViewModel
+@{
+    ViewData["Title"] = $"Удаление сотрудника id:{Model.Id}";
+}
+<div class="container">
+    <h3>Вы уверены что хотите удалить @Model.LastName @Model.FirstName @Model.Patronymic?</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Имя</dt>
+        <dd>@Model.FirstName</dd>
+        <dt>Фамилия</dt>
+        <dd>@Model.LastName</dd>
+        <dt>Отчество</dt>
+        <dd>@Model.Patronymic</dd>
+        <dt>Возраст</dt>
+        <dd>@Model.Age</dd>
+    </dl>
+    <hr />
+    <form asp-action="DeleteConfirm" asp-route-id="@Model.Id">
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Index">К списку</a>
+    </form>
+</div>
