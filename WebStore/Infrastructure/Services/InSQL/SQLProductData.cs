@@ -34,5 +34,18 @@ namespace WebStore.Infrastructure.Services.InSQL
 
             return query;
         }
+
+        public Section GetSectionById(int id) => db.Sections
+            .Include(section => section.Products)
+            .FirstOrDefault(s => s.Id == id);
+
+        public Brand GetBrandById(int id) => db.Brands
+            .Include(brands => brands.Products)
+            .FirstOrDefault(s => s.Id == id);
+
+        public Product GetProductById(int id) => db.Products
+            .Include(p => p.Section)
+            .Include(p => p.Brand)
+            .FirstOrDefault(p => p.Id == id);
     }
 }
