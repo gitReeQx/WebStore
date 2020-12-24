@@ -27,10 +27,17 @@ namespace WebStore.Infrastructure.Services.InSQL
         {
             IQueryable<Product> query = db.Products;
 
-            if (Filter?.BrandId != null)
-                query = query.Where(p => p.BrandId == Filter.BrandId);
-            if (Filter?.SectionId != null)
-                query = query.Where(p => p.SectionId == Filter.SectionId);
+            if (Filter?.Ids?.Length > 0)
+            {
+                query = query.Where(product => Filter.Ids.Contains(product.Id));
+            }
+            else
+            {
+                if (Filter?.BrandId != null)
+                    query = query.Where(p => p.BrandId == Filter.BrandId);
+                if (Filter?.SectionId != null)
+                    query = query.Where(p => p.SectionId == Filter.SectionId);
+            }
 
             return query;
         }
