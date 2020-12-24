@@ -19,8 +19,8 @@ namespace WebStore.Controllers
         {
             cartService.AddToCart(id);
 
-            var referer = Request.Headers["Referer"];
-            if (Url.IsLocalUrl(referer))
+            var referer = Request.Headers["Referer"].ToString();
+            if (Url.IsLocalUrl(referer)) //насколько мне удалось узнать, то такая проблема только на локалке возникает...
                 return Redirect(referer);
 
             return RedirectToAction(nameof(Index));
