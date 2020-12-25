@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Infrastructure.Interfaces;
 
@@ -19,9 +20,38 @@ namespace WebStore.Areas.Admin.Controllers
             productData = _productData;
         }
 
-        public IActionResult Index()
+        public IActionResult Index() => View(productData.GetProducts());
+
+        public IActionResult Edit(int id)
         {
-            return View();
+            var product = productData.GetProductById(id);
+            if (product is null) return NotFound();
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Product _product)
+        {
+            if (!ModelState.IsValid) return View(_product);
+
+            productData.AddProduct(_product);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var product = productData.GetProductById(id);
+            if (product is null) return NotFound();
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirm(int id)
+        {
+            productData.DeleteProduct(id);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
