@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Infrastructure.Interfaces;
+using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {
@@ -13,8 +14,11 @@ namespace WebStore.Controllers
 
         public CartController(ICartService CartService) => cartService = CartService;
 
-        public IActionResult Index() => View(cartService.TransformFromCart());
-
+        public IActionResult Index() => View(new CartOrderViewModel
+        {
+            Cart = cartService.TransformFromCart()
+        });
+           
         public IActionResult AddToCart(int id)
         {
             cartService.AddToCart(id);
@@ -42,6 +46,11 @@ namespace WebStore.Controllers
         {
             cartService.Clear();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Checkout(OrderViewModel model)
+        {
+            return RedirectToAction("Index");
         }
     }
 }
