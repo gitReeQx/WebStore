@@ -100,6 +100,12 @@ namespace WebStore
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/greeting", async context => await context.Response.WriteAsync(_configuration["greeting"]));
+
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+            
                 endpoints.MapControllerRoute(
                     name:"Default",
                     pattern:"{controller=Home}/{action=Index}/{id?}");
