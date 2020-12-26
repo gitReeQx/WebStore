@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,9 +49,26 @@ namespace WebStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Checkout(OrderViewModel model)
+        [Authorize]
+        public async Task<IActionResult> Checkout(OrderViewModel OrderModel, [FromServices] IOrderService OrderService)
         {
-            return RedirectToAction("Index");
+            if (!ModelState.IsValid)
+                return View(nameof(Index), new CartOrderViewModel
+                {
+                    Cart = cartService.TransformFromCart(),
+                    Order = OrderModel
+                });
+            var order = await OrderService.CreateOrder(User.Identity.Name, cartService.TransformFromCart(), OrderModel);
+
+            cartService.Clear();
+
+            return RedirectToAction("OrderConfirmed", new { order.Id });
+        }
+
+        public IActionResult OrderConfirmed(int id)
+        {
+            ViewBag.OrderId = id;
+            return View();
         }
     }
 }
