@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebStore.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using WebStore.Domain.Entities;
 using Newtonsoft.Json;
 using WebStore.Domain;
 using WebStore.Infrastructure.Mapping;
 using WebStore.Domain.ViewModels;
+using WebStore.Interfaces.Services;
 
 namespace WebStore.Infrastructure.Services.InCookies
 {

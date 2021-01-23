@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using WebStore.Data;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Domain.ViewModels;
-using WebStore.Infrastructure.Interfaces;
+using WebStore.Interfaces.Services;
 using WebStore.Models;
 
 namespace WebStore.Controllers
