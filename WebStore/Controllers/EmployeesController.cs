@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Data;
+using WebStore.Domain.Entities.Identity;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 using WebStore.ViewModels;
@@ -11,6 +13,7 @@ using WebStore.ViewModels;
 namespace WebStore.Controllers
 {
     //[Route("Users")]
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesData employees;
@@ -33,6 +36,7 @@ namespace WebStore.Controllers
 
         #region Editing Employee
         [HttpGet]
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Edit(int? id)
         {
             if (id is null)
@@ -57,6 +61,7 @@ namespace WebStore.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Edit(EmployeesViewModel _model)
         {
             if (_model.Age == 25)
@@ -88,6 +93,7 @@ namespace WebStore.Controllers
         #endregion
 
         #region Create Employee
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Create()
         {
             return View("Edit", new EmployeesViewModel());
@@ -95,6 +101,7 @@ namespace WebStore.Controllers
         #endregion
 
         #region Delete Employee
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult Delete(int id)
         {
             if (id <= 0)
@@ -116,6 +123,7 @@ namespace WebStore.Controllers
             });
         }
         [HttpPost]
+        [Authorize(Roles = Role.Administrator)]
         public IActionResult DeleteConfirm(int id)
         {
             employees.Delete(id);
