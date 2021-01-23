@@ -6,9 +6,9 @@ using WebStore.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Http;
 using WebStore.Domain.Entities;
 using Newtonsoft.Json;
-using WebStore.ViewModels;
 using WebStore.Domain;
 using WebStore.Infrastructure.Mapping;
+using WebStore.Domain.ViewModels;
 
 namespace WebStore.Infrastructure.Services.InCookies
 {

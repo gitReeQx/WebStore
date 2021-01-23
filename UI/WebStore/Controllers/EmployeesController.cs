@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Data;
 using WebStore.Domain.Entities.Identity;
+using WebStore.Domain.ViewModels;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
-using WebStore.ViewModels;
 
 namespace WebStore.Controllers
 {

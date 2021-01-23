@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Domain.Entities.Base.Interface;
 
-namespace WebStore.ViewModels
+namespace WebStore.Domain.ViewModels
 {
     public class SectionViewModel : INamedEntity, IOrderedEntity
     {
@@ -12,7 +12,7 @@ namespace WebStore.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List<SectionViewModel> ChildSection { get; set; } = new();
+        public List<SectionViewModel> ChildSection { get; set; } = new List<SectionViewModel>();
 
         public SectionViewModel ParentSection { get; set; }
 

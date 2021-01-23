@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Domain.Entities.Base.Interface;
 
-namespace WebStore.ViewModels
+namespace WebStore.Domain.ViewModels
 {
     public class ProductViewModel : INamedEntity
     {
