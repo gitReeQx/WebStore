@@ -43,5 +43,25 @@ namespace WebStore.Infrastructure.Services
         {
             throw new NotSupportedException();
         }
+
+        public int Add(Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddProduct(Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteProduct(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
