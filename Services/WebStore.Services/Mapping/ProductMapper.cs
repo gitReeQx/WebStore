@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using WebStore.Domain.Entities;
 using WebStore.Domain.ViewModels;
 
-namespace WebStore.Infrastructure.Mapping
+namespace WebStore.Services.Mapping
 {
     public static class ProductMapper
     {
-        public static ProductViewModel ToView(this Product p) => new()
+        public static ProductViewModel ToView(this Product p) => new ProductViewModel()
         {
             Id = p.Id,
             Name = p.Name,

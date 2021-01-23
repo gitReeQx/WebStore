@@ -10,9 +10,9 @@ using WebStore.Domain.Entities.Orders;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
 
-namespace WebStore.Infrastructure.Services.InSQL
+namespace WebStore.Services.Products.InSQL
 {
-    public class SQLOrderService: IOrderService
+    public class SQLOrderService : IOrderService
     {
         private readonly WebStoreDB db;
         private readonly UserManager<User> userManager;
@@ -40,7 +40,7 @@ namespace WebStore.Infrastructure.Services.InSQL
                 User = user
             };
 
-            foreach(var (product_model, quantity) in Cart.Items)
+            foreach (var (product_model, quantity) in Cart.Items)
             {
                 var product = await db.Products.FindAsync(product_model.Id);
                 if (product is null) continue;
