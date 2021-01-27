@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using WebStore.Clients.Base;
 using WebStore.Domain.Models;
@@ -21,27 +22,27 @@ namespace WebStore.Clients.Employees
 
         public int Add(Employee employee)
         {
-            throw new NotImplementedException();
+            return Post(Address, employee).Content.ReadAsAsync<int>().Result;
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            return Delete($"{Address}/{id}").IsSuccessStatusCode;
         }
 
         public IEnumerable<Employee> Get()
         {
-            throw new NotImplementedException();
+            return Get<IEnumerable<Employee>>(Address);
         }
 
         public Employee Get(int id)
         {
-            throw new NotImplementedException();
+            return Get<Employee>($"{Address}/{id}");
         }
 
         public void Update(Employee employee)
         {
-            throw new NotImplementedException();
+            Put(Address, employee);
         }
     }
 }
