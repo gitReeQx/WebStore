@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Domain;
+using WebStore.Domain.DTO.Products;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
 
@@ -29,37 +30,37 @@ namespace WebStore.ServiceHosting.Controllers
         }
 
         [HttpGet("brands/{id}")]
-        public Brand GetBrandById(int id)
+        public BrandDTO GetBrandById(int id)
         {
             return productData.GetBrandById(id);
         }
 
         [HttpGet("brands")]
-        public IEnumerable<Brand> GetBrands()
+        public IEnumerable<BrandDTO> GetBrands()
         {
             return productData.GetBrands();
         }
 
         [HttpGet("{id}")]
-        public Product GetProductById(int id)
+        public ProductDTO GetProductById(int id)
         {
             return productData.GetProductById(id);
         }
 
         [HttpPost]
-        public IEnumerable<Product> GetProducts([FromBody]ProductFilter Filter = null)
+        public IEnumerable<ProductDTO> GetProducts([FromBody]ProductFilter Filter = null)
         {
             return productData.GetProducts(Filter);
         }
 
         [HttpGet("sections/{id}")]
-        public Section GetSectionById(int id)
+        public SectionDTO GetSectionById(int id)
         {
             return productData.GetSectionById(id);
         }
 
         [HttpGet("sections")]
-        public IEnumerable<Section> GetSections()
+        public IEnumerable<SectionDTO> GetSections()
         {
             return productData.GetSections();
         }

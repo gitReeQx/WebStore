@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WebStore.Domain.Entities;
 using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
 namespace WebStore.Areas.Admin.Controllers
 {
@@ -26,7 +27,7 @@ namespace WebStore.Areas.Admin.Controllers
         {
             var product = productData.GetProductById(id);
             if (product is null) return NotFound();
-            return View(product);
+            return View(product.FromDTO());
         }
 
         [HttpPost]
@@ -43,7 +44,7 @@ namespace WebStore.Areas.Admin.Controllers
         {
             var product = productData.GetProductById(id);
             if (product is null) return NotFound();
-            return View(product);
+            return View(product.FromDTO());
         }
 
         [HttpPost]
