@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using WebStore.Clients.Employees;
 using WebStore.Clients.Values;
 using WebStore.DAL.Context;
 using WebStore.Domain.Entities.Identity;
@@ -66,7 +67,7 @@ namespace WebStore
                 opt.SlidingExpiration = true;
             });
 
-            services.AddTransient<IEmployeesData, InMemoryEmployeesData>();
+            services.AddTransient<IEmployeesData, EmployeesClient>();
             services.AddTransient<IProductData, SQLProductData>();
             services.AddScoped<ICartService, InCookiesCartService>();
             services.AddScoped<IOrderService, SQLOrderService>();
