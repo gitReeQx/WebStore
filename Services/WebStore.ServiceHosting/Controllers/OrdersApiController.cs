@@ -13,9 +13,9 @@ namespace WebStore.ServiceHosting.Controllers
     public class OrdersApiController : ControllerBase, IOrderService
     {
         private readonly IOrderService orderService;
-        private readonly Logger<OrdersApiController> logger;
+        private readonly ILogger<OrdersApiController> logger;
 
-        public OrdersApiController(IOrderService OrderService, Logger<OrdersApiController> Logger)
+        public OrdersApiController(IOrderService OrderService, ILogger<OrdersApiController> Logger)
         {
             orderService = OrderService;
             logger = Logger;

@@ -7,7 +7,7 @@
     //    public int Order { get; set; }
     //}
 
-    public record BrandDTO ( int Id, string Name, int Order, int ProductCount);
+    public record BrandDTO( int Id, string Name, int Order, int ProductCount);
 
     public record SectionDTO(int Id, string Name, int Order, int? ParentId, int ProductCount);
 

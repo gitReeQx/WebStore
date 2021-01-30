@@ -17,10 +17,9 @@ namespace WebStore.Clients.Orders
     {
         private readonly ILogger<OrdersClient> logger;
 
-        public OrdersClient(IConfiguration Configuration, ILogger<OrdersClient> Logger) : base(Configuration, WebAPI.Orders)
-        {
+        public OrdersClient(IConfiguration Configuration, ILogger<OrdersClient> Logger) 
+            : base(Configuration, WebAPI.Orders) => 
             logger = Logger;
-        }
 
         public async Task<OrderDTO> CreateOrder(string UserName, CreateOrderModel OrderModel)
         {
