@@ -9,7 +9,7 @@ namespace WebStore.Services.Mapping
     {
         public static BrandDTO ToDTO(this Brand Brand) => Brand is null
             ? null
-            : new BrandDTO(Brand.Id, Brand.Name, Brand.Order);
+            : new BrandDTO(Brand.Id, Brand.Name, Brand.Order, Brand.Products.Count());
 
         public static Brand FromDTO(this BrandDTO BrandDTO) => BrandDTO is null
             ? null

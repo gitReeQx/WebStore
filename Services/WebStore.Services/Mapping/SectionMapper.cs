@@ -9,7 +9,7 @@ namespace WebStore.Services.Mapping
     {
         public static SectionDTO ToDTO(this Section Section) => Section is null
             ? null
-            : new SectionDTO(Section.Id, Section.Name, Section.Order, Section.ParentId);
+            : new SectionDTO(Section.Id, Section.Name, Section.Order, Section.ParentId, Section.Products.Count());
 
         public static Section FromDTO(this SectionDTO SectionDTO) => SectionDTO is null
             ? null
