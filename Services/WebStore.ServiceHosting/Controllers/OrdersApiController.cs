@@ -21,17 +21,20 @@ namespace WebStore.ServiceHosting.Controllers
             logger = Logger;
         }
 
+        [HttpPost("{UserName}")]
         public Task<OrderDTO> CreateOrder(string UserName, [FromBody] CreateOrderModel OrderModel)
         {
             logger.LogInformation("Формирование заказа для пользователя {0}", UserName);
             return orderService.CreateOrder(UserName, OrderModel);
         }
 
+        [HttpGet("{id}")]
         public Task<OrderDTO> GetOrderById(int id)
         {
             return orderService.GetOrderById(id);
         }
 
+        [HttpGet("user/{UserName}")]
         public Task<IEnumerable<OrderDTO>> GetUserOrders(string UserName)
         {
             return orderService.GetUserOrders(UserName);
