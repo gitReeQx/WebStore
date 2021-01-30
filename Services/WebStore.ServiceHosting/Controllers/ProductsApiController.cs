@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using WebStore.Domain;
 using WebStore.Domain.DTO.Products;
 using WebStore.Domain.Entities;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.ServiceHosting.Controllers
 {
-    [Route("api/products")]
+    [Route(WebAPI.Products)]
     [ApiController]
     public class ProductsApiController : ControllerBase, IProductData
     {

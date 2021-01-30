@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using WebStore.Clients.Base;
 using WebStore.Domain.Models;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.Clients.Employees
@@ -15,7 +16,7 @@ namespace WebStore.Clients.Employees
         private readonly ILogger<EmployeesClient> logger;
 
         public EmployeesClient(IConfiguration Configuration, ILogger<EmployeesClient> Logger) 
-            : base(Configuration, "api/employees")
+            : base(Configuration, WebAPI.Employees)
         {
             logger = Logger;
         }
