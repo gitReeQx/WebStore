@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebStore.DAL.Context;
 using WebStore.Domain;
+using WebStore.Domain.DTO.Products;
 using WebStore.Domain.Entities;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
 namespace WebStore.Services.Products.InSQL
 {
@@ -19,11 +21,11 @@ namespace WebStore.Services.Products.InSQL
             db = _db;
         }
 
-        public IEnumerable<Brand> GetBrands() => db.Brands.Include(brand => brand.Products);
+        public IEnumerable<BrandDTO> GetBrands() => db.Brands.Include(brand => brand.Products).AsEnumerable().ToDTO();
 
-        public IEnumerable<Section> GetSections() => db.Sections.Include(section => section.Products);
+        public IEnumerable<SectionDTO> GetSections() => db.Sections.Include(section => section.Products).AsEnumerable().ToDTO();
 
-        public IEnumerable<Product> GetProducts(ProductFilter Filter = null)
+        public IEnumerable<ProductDTO> GetProducts(ProductFilter Filter = null)
         {
             IQueryable<Product> query = db.Products
                 .Include(p => p.Section)
@@ -41,21 +43,21 @@ namespace WebStore.Services.Products.InSQL
                     query = query.Where(p => p.SectionId == Filter.SectionId);
             }
 
-            return query;
+            return query.AsEnumerable().ToDTO();
         }
 
-        public Section GetSectionById(int id) => db.Sections
+        public SectionDTO GetSectionById(int id) => db.Sections
             .Include(section => section.Products)
-            .FirstOrDefault(s => s.Id == id);
+            .FirstOrDefault(s => s.Id == id).ToDTO();
 
-        public Brand GetBrandById(int id) => db.Brands
+        public BrandDTO GetBrandById(int id) => db.Brands
             .Include(brands => brands.Products)
-            .FirstOrDefault(s => s.Id == id);
+            .FirstOrDefault(s => s.Id == id).ToDTO();
 
-        public Product GetProductById(int id) => db.Products
+        public ProductDTO GetProductById(int id) => db.Products
             .Include(p => p.Section)
             .Include(p => p.Brand)
-            .FirstOrDefault(p => p.Id == id);
+            .FirstOrDefault(p => p.Id == id).ToDTO();
 
         public void AddProduct(Product product)
         {

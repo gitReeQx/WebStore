@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
+using WebStore.Services.Mapping;
 
 namespace WebStore.Components
 {
@@ -25,7 +26,7 @@ namespace WebStore.Components
                     Id = s.Id,
                     Name = s.Name,
                     Order = s.Order,
-                    ProductsCount = s.Products.Count
+                    ProductsCount = s.ProductCount
                 })
                 .ToList();
 
@@ -41,7 +42,7 @@ namespace WebStore.Components
                         Name = childs_section.Name,
                         Order = childs_section.Order,
                         ParentSection = parent_section,
-                        ProductsCount = childs_section.Products.Count
+                        ProductsCount = childs_section.ProductCount
                     });
                 }
                 parent_section.ChildSection.Sort((a, b) => Comparer<int>.Default.Compare(a.Order, b.Order));
