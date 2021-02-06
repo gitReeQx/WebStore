@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.Domain.Entities.Base;
 
-namespace WebStore.Domain.Models
+namespace WebStore.Domain.Entities
 {
     /// <summary>Сотрудник</summary>
-    public class Employee
+    public class Employee: Entity
     {
-        public int Id { get; set; }
-
         /// <summary>Имя</summary>
         public string FirstName { get; set; }
         /// <summary>Фамилия</summary>
