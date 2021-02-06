@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using WebStore.DAL.Context;
 using WebStore.Domain.DTO.Identity;
 using WebStore.Domain.Entities.Identity;
@@ -30,154 +28,152 @@ namespace WebStore.ServiceHosting.Controllers.Identity
         public async Task<IEnumerable<User>> GetAllUsers() => await _UserStore.Users.ToArrayAsync();
 
         #region Users
-        [HttpPost("userId")]
+
+        [HttpPost("UserId")] // POST: api/users/UserId
         public async Task<string> GetUserIdAsync([FromBody] User user) => await _UserStore.GetUserIdAsync(user);
 
-        [HttpPost("userName")]
+        [HttpPost("UserName")]
         public async Task<string> GetUserNameAsync([FromBody] User user) => await _UserStore.GetUserNameAsync(user);
 
-        [HttpPost("userName/{userName}")]
-        public async Task<string> SetUserNameAsync([FromBody] User user, string userName)
+        [HttpPost("UserName/{name}")] // api/users/UserName/TestUser
+        public async Task<string> SetUserNameAsync([FromBody] User user, string name)
         {
-            await _UserStore.SetUserNameAsync(user, userName);
+            await _UserStore.SetUserNameAsync(user, name);
             await _UserStore.UpdateAsync(user);
             return user.UserName;
         }
 
-        [HttpPost("normalUserName")]
-        public async Task<string> GetNormalizedUserNameAsync([FromBody]User user)
-        {
-            var result = await _UserStore.GetNormalizedUserNameAsync(user);
-            return result;
-        }
+        [HttpPost("NormalUserName")]
+        public async Task<string> GetNormalizedUserNameAsync([FromBody] User user) => await _UserStore.GetNormalizedUserNameAsync(user);
 
-        [HttpPost("normalUserName/{normalizedName}")]
-        public async Task<string> SetNormalizedUserNameAsync([FromBody] User user, string normalizedName)
+        [HttpPost("NormalUserName/{name}")]
+        public async Task<string> SetNormalizedUserNameAsync([FromBody] User user, string name)
         {
-            await _UserStore.SetNormalizedUserNameAsync(user, normalizedName);
+            await _UserStore.SetNormalizedUserNameAsync(user, name);
             await _UserStore.UpdateAsync(user);
             return user.NormalizedUserName;
         }
 
-        [HttpPost("user")]
+        [HttpPost("User")] // api/users/user
         public async Task<bool> CreateAsync([FromBody] User user)
         {
-            var result = await _UserStore.CreateAsync(user);
-            return result.Succeeded;
+            var creation_result = await _UserStore.CreateAsync(user);
+            // добавление ошибок создания нового пользователя в журнал
+            return creation_result.Succeeded;
         }
 
-        [HttpPut("user")]
+        [HttpPut("User")]
         public async Task<bool> UpdateAsync([FromBody] User user)
         {
-            var result = await _UserStore.UpdateAsync(user);
-            return result.Succeeded;
+            var update_result = await _UserStore.UpdateAsync(user);
+            return update_result.Succeeded;
         }
 
-        [HttpPost("user/delete")]
+        [HttpPost("User/Delete")]
         public async Task<bool> DeleteAsync([FromBody] User user)
         {
-            var result = await _UserStore.DeleteAsync(user);
-            return result.Succeeded;
+            var delete_result = await _UserStore.DeleteAsync(user);
+            return delete_result.Succeeded;
         }
 
-        [HttpGet("user/find/{userId}")]
-        public async Task<User> FindByIdAsync(string userId)
-        {
-            var result = await _UserStore.FindByIdAsync(userId);
-            return result;
-        }
-        [HttpGet("user/normal/{normalizedUserName}")]
-        public async Task<User> FindByNameAsync(string normalizedUserName)
-        {
-            var result = await _UserStore.FindByNameAsync(normalizedUserName);
-            return result;
-        }
+        [HttpGet("User/Find/{id}")] // api/users/user/Find/9E5CB5E7-41DE-4449-829E-45F4C97AA54B
+        public async Task<User> FindByIdAsync(string id) => await _UserStore.FindByIdAsync(id);
 
-        [HttpPost("role/{roleName}")]
-        public async Task AddToRoleAsync([FromBody] User user, string roleName, [FromServices] WebStoreDB db)
+        [HttpGet("User/Normal/{name}")] // api/users/user/Normal/TestUser
+        public async Task<User> FindByNameAsync(string name) => await _UserStore.FindByNameAsync(name);
+
+        [HttpPost("Role/{role}")]
+        public async Task AddToRoleAsync([FromBody] User user, string role, [FromServices] WebStoreDB db)
         {
-            await _UserStore.AddToRoleAsync(user, roleName);
+            await _UserStore.AddToRoleAsync(user, role);
             await db.SaveChangesAsync();
         }
 
-        [HttpPost("role/delete/{roleName}")]
-        public async Task RemoveFromRoleAsync([FromBody] User user, string roleName) => await _UserStore.RemoveFromRoleAsync(user, roleName);
+        [HttpPost("Role/Delete/{role}")]
+        public async Task RemoveFromRoleAsync([FromBody] User user, string role, [FromServices] WebStoreDB db)
+        {
+            await _UserStore.RemoveFromRoleAsync(user, role);
+            await db.SaveChangesAsync();
+        }
 
-        [HttpPost("roles")]
+        [HttpPost("Roles")]
         public async Task<IList<string>> GetRolesAsync([FromBody] User user) => await _UserStore.GetRolesAsync(user);
 
-        [HttpPost("inrole/{roleName}")]
-        public async Task<bool> IsInRoleAsync([FromBody] User user, string roleName) => await _UserStore.IsInRoleAsync(user, roleName);
+        [HttpPost("InRole/{role}")]
+        public async Task<bool> IsInRoleAsync([FromBody] User user, string role) => await _UserStore.IsInRoleAsync(user, role);
 
-        [HttpGet("usersInRole/{roleName}")]
-        public async Task<IList<User>> GetUsersInRoleAsync(string roleName) => await _UserStore.GetUsersInRoleAsync(roleName);
+        [HttpGet("UsersInRole/{role}")]
+        public async Task<IList<User>> GetUsersInRoleAsync(string role) => await _UserStore.GetUsersInRoleAsync(role);
 
-        [HttpPost("setPasswordHash")]
-        public async Task<string> SetPasswordHashAsync([FromBody] PasswordHashDTO hashDto)
+        [HttpPost("GetPasswordHash")]
+        public async Task<string> GetPasswordHashAsync([FromBody] User user) => await _UserStore.GetPasswordHashAsync(user);
+
+        [HttpPost("SetPasswordHash")]
+        public async Task<string> SetPasswordHashAsync([FromBody] PasswordHashDTO hash)
         {
-            await _UserStore.SetPasswordHashAsync(hashDto.User, hashDto.Hash);
-            await _UserStore.UpdateAsync(hashDto.User);
-            return hashDto.User.PasswordHash;
+            await _UserStore.SetPasswordHashAsync(hash.User, hash.Hash);
+            await _UserStore.UpdateAsync(hash.User);
+            return hash.User.PasswordHash;
         }
 
-        [HttpPost("getPasswordHash")]
-        public async Task<string> GetPasswordHashAsync([FromBody] User user)
-        {
-            var result = await _UserStore.GetPasswordHashAsync(user);
-            return result;
-        }
-
-        [HttpPost("hasPassword")]
+        [HttpPost("HasPassword")]
         public async Task<bool> HasPasswordAsync([FromBody] User user) => await _UserStore.HasPasswordAsync(user);
 
         #endregion
+
         #region Claims
-        [HttpPost("getClaims")]
+
+        [HttpPost("GetClaims")]
         public async Task<IList<Claim>> GetClaimsAsync([FromBody] User user) => await _UserStore.GetClaimsAsync(user);
 
-        [HttpPost("addClaims")]
-        public async Task AddClaimsAsync([FromBody] AddClaimDTO claimsDto, [FromServices] WebStoreDB db)
+        [HttpPost("AddClaims")]
+        public async Task AddClaimsAsync([FromBody] AddClaimDTO ClaimInfo, [FromServices] WebStoreDB db)
         {
-            await _UserStore.AddClaimsAsync(claimsDto.User, claimsDto.Claims);
+            await _UserStore.AddClaimsAsync(ClaimInfo.User, ClaimInfo.Claims);
             await db.SaveChangesAsync();
         }
 
-        [HttpPost("replaceClaim")]
-        public async Task ReplaceClaimAsync([FromBody] ReplaceClaimDTO claimDTO, [FromServices] WebStoreDB db)
+        [HttpPost("ReplaceClaim")]
+        public async Task ReplaceClaimAsync([FromBody] ReplaceClaimDTO ClaimInfo, [FromServices] WebStoreDB db)
         {
-            await _UserStore.ReplaceClaimAsync(claimDTO.User, claimDTO.Claim, claimDTO.NewClaim);
+            await _UserStore.ReplaceClaimAsync(ClaimInfo.User, ClaimInfo.Claim, ClaimInfo.NewClaim);
             await db.SaveChangesAsync();
         }
 
-        [HttpPost("removeClaims")]
-        public async Task RemoveClaimsAsync([FromBody] RemoveClaimDTO claimsDto, [FromServices] WebStoreDB db)
+        [HttpPost("RemoveClaim")]
+        public async Task RemoveClaimsAsync([FromBody] RemoveClaimDTO ClaimInfo, [FromServices] WebStoreDB db)
         {
-            await _UserStore.RemoveClaimsAsync(claimsDto.User, claimsDto.Claims);
+            await _UserStore.RemoveClaimsAsync(ClaimInfo.User, ClaimInfo.Claims);
             await db.SaveChangesAsync();
         }
 
-        [HttpPost("getUsersForClaim")]
-        public async Task<IList<User>> GetUsersForClaimAsync([FromBody]Claim claim)
-        {
-            return await _UserStore.GetUsersForClaimAsync(claim);
-        }
+        [HttpPost("GetUsersForClaim")]
+        public async Task<IList<User>> GetUsersForClaimAsync([FromBody] Claim claim) =>
+            await _UserStore.GetUsersForClaimAsync(claim);
 
         #endregion
+
         #region TwoFactor
-        [HttpPost("setTwoFactor/{enabled}")]
-        public async Task<bool> SetTwoFactorEnabledAsync([FromBody] User user, bool enabled)
+
+        [HttpPost("GetTwoFactorEnabled")]
+        public async Task<bool> GetTwoFactorEnabledAsync([FromBody] User user) => await _UserStore.GetTwoFactorEnabledAsync(user);
+
+        [HttpPost("SetTwoFactor/{enable}")]
+        public async Task<bool> SetTwoFactorEnabledAsync([FromBody] User user, bool enable)
         {
-            await _UserStore.SetTwoFactorEnabledAsync(user, enabled);
+            await _UserStore.SetTwoFactorEnabledAsync(user, enable);
             await _UserStore.UpdateAsync(user);
             return user.TwoFactorEnabled;
         }
 
-        [HttpPost("getTwoFactorEnabled")]
-        public async Task<bool> GetTwoFactorEnabledAsync([FromBody] User user) => await _UserStore.GetTwoFactorEnabledAsync(user);
-
         #endregion
+
         #region Email/Phone
-        [HttpPost("setEmail/{email}")]
+
+        [HttpPost("GetEmail")]
+        public async Task<string> GetEmailAsync([FromBody] User user) => await _UserStore.GetEmailAsync(user);
+
+        [HttpPost("SetEmail/{email}")]
         public async Task<string> SetEmailAsync([FromBody] User user, string email)
         {
             await _UserStore.SetEmailAsync(user, email);
@@ -185,52 +181,47 @@ namespace WebStore.ServiceHosting.Controllers.Identity
             return user.Email;
         }
 
-        [HttpPost("getEmail")]
-        public async Task<string> GetEmailAsync([FromBody] User user) => await _UserStore.GetEmailAsync(user);
-
-        [HttpPost("getEmailConfirmed")]
+        [HttpPost("GetEmailConfirmed")]
         public async Task<bool> GetEmailConfirmedAsync([FromBody] User user) => await _UserStore.GetEmailConfirmedAsync(user);
 
-        [HttpPost("setEmailConfirmed/{confirmed}")]
-        public async Task<bool> SetEmailConfirmedAsync([FromBody] User user, bool confirmed)
+        [HttpPost("SetEmailConfirmed/{enable}")]
+        public async Task<bool> SetEmailConfirmedAsync([FromBody] User user, bool enable)
         {
-            await _UserStore.SetEmailConfirmedAsync(user, confirmed);
+            await _UserStore.SetEmailConfirmedAsync(user, enable);
             await _UserStore.UpdateAsync(user);
             return user.EmailConfirmed;
         }
 
-        [HttpGet("user/findByEmail/{normalizedEmail}")]
-        public async Task<User> FindByEmailAsync(string normalizedEmail)
-        {
-            return await _UserStore.FindByEmailAsync(normalizedEmail);
-        }
+        [HttpGet("UserFindByEmail/{email}")]
+        public async Task<User> FindByEmailAsync(string email) => await _UserStore.FindByEmailAsync(email);
 
-        [HttpPost("getNormalizedEmail")]
+        [HttpPost("GetNormalizedEmail")]
         public async Task<string> GetNormalizedEmailAsync([FromBody] User user) => await _UserStore.GetNormalizedEmailAsync(user);
 
-        [HttpPost("setEmail/{normalizedEmail}")]
-        public async Task<string> SetNormalizedEmailAsync([FromBody] User user, string normalizedEmail)
+        [HttpPost("SetNormalizedEmail/{email?}")]
+        public async Task<string> SetNormalizedEmailAsync([FromBody] User user, string email)
         {
-            await _UserStore.SetNormalizedEmailAsync(user, normalizedEmail);
+            await _UserStore.SetNormalizedEmailAsync(user, email);
             await _UserStore.UpdateAsync(user);
             return user.NormalizedEmail;
         }
 
-        [HttpPost("setPhoneNumber/{phoneNumber}")]
-        public async Task<string> SetPhoneNumberAsync([FromBody] User user, string phoneNumber)
+        [HttpPost("GetPhoneNumber")]
+        public async Task<string> GetPhoneNumberAsync([FromBody] User user) => await _UserStore.GetPhoneNumberAsync(user);
+
+        [HttpPost("SetPhoneNumber/{phone}")]
+        public async Task<string> SetPhoneNumberAsync([FromBody] User user, string phone)
         {
-            await _UserStore.SetPhoneNumberAsync(user, phoneNumber);
+            await _UserStore.SetPhoneNumberAsync(user, phone);
             await _UserStore.UpdateAsync(user);
             return user.PhoneNumber;
         }
 
-        [HttpPost("getPhoneNumber")]
-        public async Task<string> GetPhoneNumberAsync([FromBody] User user) => await _UserStore.GetPhoneNumberAsync(user);
+        [HttpPost("GetPhoneNumberConfirmed")]
+        public async Task<bool> GetPhoneNumberConfirmedAsync([FromBody] User user) =>
+            await _UserStore.GetPhoneNumberConfirmedAsync(user);
 
-        [HttpPost("getPhoneNumberConfirmed")]
-        public async Task<bool> GetPhoneNumberConfirmedAsync([FromBody] User user) => await _UserStore.GetPhoneNumberConfirmedAsync(user);
-
-        [HttpPost("setPhoneNumberConfirmed/{confirmed}")]
+        [HttpPost("SetPhoneNumberConfirmed/{confirmed}")]
         public async Task<bool> SetPhoneNumberConfirmedAsync([FromBody] User user, bool confirmed)
         {
             await _UserStore.SetPhoneNumberConfirmedAsync(user, confirmed);
@@ -239,40 +230,42 @@ namespace WebStore.ServiceHosting.Controllers.Identity
         }
 
         #endregion
+
         #region Login/Lockout
-        [HttpPost("addLogin")]
-        public async Task AddLoginAsync([FromBody] AddLoginDTO loginDto, [FromServices] WebStoreDB db)
+
+        [HttpPost("AddLogin")]
+        public async Task AddLoginAsync([FromBody] AddLoginDTO login, [FromServices] WebStoreDB db)
         {
-            await _UserStore.AddLoginAsync(loginDto.User, loginDto.UserLoginInfo);
+            await _UserStore.AddLoginAsync(login.User, login.UserLoginInfo);
             await db.SaveChangesAsync();
         }
 
-        [HttpPost("removeLogin/{loginProvider}/{providerKey}")]
-        public async Task RemoveLoginAsync([FromBody] User user, string loginProvider, string providerKey, [FromServices] WebStoreDB db)
+        [HttpPost("RemoveLogin/{LoginProvider}/{ProviderKey}")]
+        public async Task RemoveLoginAsync([FromBody] User user, string LoginProvider, string ProviderKey, [FromServices] WebStoreDB db)
         {
-            await _UserStore.RemoveLoginAsync(user, loginProvider, providerKey);
+            await _UserStore.RemoveLoginAsync(user, LoginProvider, ProviderKey);
             await db.SaveChangesAsync();
         }
 
-        [HttpPost("getLogins")]
+        [HttpPost("GetLogins")]
         public async Task<IList<UserLoginInfo>> GetLoginsAsync([FromBody] User user) => await _UserStore.GetLoginsAsync(user);
 
-        [HttpGet("user/findbylogin/{loginProvider}/{providerKey}")]
-        public async Task<User> FindByLoginAsync(string loginProvider, string providerKey) => await _UserStore.FindByLoginAsync(loginProvider, providerKey);
+        [HttpGet("User/FindByLogin/{LoginProvider}/{ProviderKey}")]
+        public async Task<User> FindByLoginAsync(string LoginProvider, string ProviderKey) => await _UserStore.FindByLoginAsync(LoginProvider, ProviderKey);
 
-        [HttpPost("getLockoutEndDate")]
-        public async Task<DateTimeOffset?> GetLockoutEndDateAsync(User user) => await _UserStore.GetLockoutEndDateAsync(user);
+        [HttpPost("GetLockoutEndDate")]
+        public async Task<DateTimeOffset?> GetLockoutEndDateAsync([FromBody] User user) => await _UserStore.GetLockoutEndDateAsync(user);
 
-        [HttpPost("setLockoutEndDate")]
-        public async Task<DateTimeOffset?> SetLockoutEndDateAsync(SetLockoutDTO setLockoutDto)
+        [HttpPost("SetLockoutEndDate")]
+        public async Task<DateTimeOffset?> SetLockoutEndDateAsync([FromBody] SetLockoutDTO LockoutInfo)
         {
-            await _UserStore.SetLockoutEndDateAsync(setLockoutDto.User, setLockoutDto.LockoutEnd);
-            await _UserStore.UpdateAsync(setLockoutDto.User);
-            return setLockoutDto.User.LockoutEnd;
+            await _UserStore.SetLockoutEndDateAsync(LockoutInfo.User, LockoutInfo.LockoutEnd);
+            await _UserStore.UpdateAsync(LockoutInfo.User);
+            return LockoutInfo.User.LockoutEnd;
         }
 
         [HttpPost("IncrementAccessFailedCount")]
-        public async Task<int> IncrementAccessFailedCountAsync(User user)
+        public async Task<int> IncrementAccessFailedCountAsync([FromBody] User user)
         {
             var count = await _UserStore.IncrementAccessFailedCountAsync(user);
             await _UserStore.UpdateAsync(user);
@@ -280,7 +273,7 @@ namespace WebStore.ServiceHosting.Controllers.Identity
         }
 
         [HttpPost("ResetAccessFailedCount")]
-        public async Task<int> ResetAccessFailedCountAsync(User user)
+        public async Task<int> ResetAccessFailedCountAsync([FromBody] User user)
         {
             await _UserStore.ResetAccessFailedCountAsync(user);
             await _UserStore.UpdateAsync(user);
@@ -288,22 +281,19 @@ namespace WebStore.ServiceHosting.Controllers.Identity
         }
 
         [HttpPost("GetAccessFailedCount")]
-        public async Task<int> GetAccessFailedCountAsync(User user)
-        {
-            return await _UserStore.GetAccessFailedCountAsync(user);
-        }
+        public async Task<int> GetAccessFailedCountAsync([FromBody] User user) => await _UserStore.GetAccessFailedCountAsync(user);
 
         [HttpPost("GetLockoutEnabled")]
-        public async Task<bool> GetLockoutEnabledAsync(User user) => await _UserStore.GetLockoutEnabledAsync(user);
+        public async Task<bool> GetLockoutEnabledAsync([FromBody] User user) => await _UserStore.GetLockoutEnabledAsync(user);
 
-        [HttpPost("SetLockoutEnabled/{enabled}")]
-        public async Task<bool> SetLockoutEnabledAsync(User user, bool enabled)
+        [HttpPost("SetLockoutEnabled/{enable}")]
+        public async Task<bool> SetLockoutEnabledAsync([FromBody] User user, bool enable)
         {
-            await _UserStore.SetLockoutEnabledAsync(user, enabled);
+            await _UserStore.SetLockoutEnabledAsync(user, enable);
             await _UserStore.UpdateAsync(user);
             return user.LockoutEnabled;
         }
-        #endregion
 
+        #endregion
     }
 }
