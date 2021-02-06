@@ -33,9 +33,6 @@ namespace WebStore.ServiceHosting.Controllers
         [HttpGet("{id}")]
         public Employee Get(int id) => employeesData.Get(id);
 
-        [HttpDelete("{id}")]
-        public bool Delete(int id) => employeesData.Delete(id);
-
         /// <summary>Добавление нового сотрудника</summary>
         /// <param name="employee">Добавляемый сотрудник</param>
         /// <returns>Идентификатор нового сотрудника</returns>
@@ -64,5 +61,20 @@ namespace WebStore.ServiceHosting.Controllers
         /// <param name="employee">Информация для изменения данных сотрудника</param>
         [HttpPut]
         public void Update(Employee employee) => employeesData.Update(employee);
+
+        /// <summary>Удаление сотрудника по его id</summary>
+        /// <param name="id">Идентификатор удаляемого сотрудника</param>
+        /// <returns>Истина, если сотрудник был удалён</returns>
+        [HttpDelete("{id}")]
+        public bool Delete(int id)
+        {
+            var result = employeesData.Delete(id);
+            if (result)
+                logger.LogInformation("Сотрудник с id:{0} успешно удалён", id);
+            else
+                logger.LogWarning("ошибка при попытке удаления сотрудника с id:{0}", id);
+
+            return result;
+        }
     }
 }

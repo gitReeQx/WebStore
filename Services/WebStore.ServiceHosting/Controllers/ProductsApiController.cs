@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebStore.Domain;
 using WebStore.Domain.DTO.Products;
-using WebStore.Domain.Entities;
 using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 
@@ -16,54 +11,29 @@ namespace WebStore.ServiceHosting.Controllers
     [ApiController]
     public class ProductsApiController : ControllerBase, IProductData
     {
-        private readonly IProductData productData;
+        private readonly IProductData _ProductData;
 
-        public ProductsApiController(IProductData ProductData) => productData = ProductData;
+        public ProductsApiController(IProductData ProductData) => _ProductData = ProductData;
 
-        public void AddProduct(Product product)
-        {
-            productData.AddProduct(product);
-        }
+        [HttpGet("sections")] // http://localhost:5000/api/products/sections
+        public IEnumerable<SectionDTO> GetSections() => _ProductData.GetSections();
 
-        public bool DeleteProduct(int id)
-        {
-            return productData.DeleteProduct(id);
-        }
+        [HttpGet("sections/{id}")] // http://localhost:5000/api/products/sections/5
+        public SectionDTO GetSectionById(int id) => _ProductData.GetSectionById(id);
 
-        [HttpGet("brands/{id}")]
-        public BrandDTO GetBrandById(int id)
-        {
-            return productData.GetBrandById(id);
-        }
+        [HttpGet("brands")] // http://localhost:5000/api/products/brands
+        public IEnumerable<BrandDTO> GetBrands() => _ProductData.GetBrands();
 
-        [HttpGet("brands")]
-        public IEnumerable<BrandDTO> GetBrands()
-        {
-            return productData.GetBrands();
-        }
+        [HttpGet("brands/{id}")] // http://localhost:5000/api/products/brands/5
+        public BrandDTO GetBrandById(int id) => _ProductData.GetBrandById(id);
 
-        [HttpGet("{id}")]
-        public ProductDTO GetProductById(int id)
-        {
-            return productData.GetProductById(id);
-        }
+        [HttpGet("{id}")] // http://localhost:5000/api/products/5
+        public ProductDTO GetProductById(int id) => _ProductData.GetProductById(id);
 
         [HttpPost]
-        public IEnumerable<ProductDTO> GetProducts([FromBody]ProductFilter Filter = null)
+        public IEnumerable<ProductDTO> GetProducts([FromBody] ProductFilter Filter = null)
         {
-            return productData.GetProducts(Filter);
-        }
-
-        [HttpGet("sections/{id}")]
-        public SectionDTO GetSectionById(int id)
-        {
-            return productData.GetSectionById(id);
-        }
-
-        [HttpGet("sections")]
-        public IEnumerable<SectionDTO> GetSections()
-        {
-            return productData.GetSections();
+            return _ProductData.GetProducts(Filter);
         }
     }
 }
