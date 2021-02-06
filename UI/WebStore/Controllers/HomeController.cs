@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebStore.Domain.Models;
+using WebStore.Domain.Entities;
 using WebStore.Services.Data;
 
 namespace WebStore.Controllers
