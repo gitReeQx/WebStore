@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
+using System.Xml;
 
 namespace WebStore.Logger
 {
-    class Log4NetLogger
+    class Log4NetLogger : ILogger
     {
+        public Log4NetLogger(string Category, XmlElement Configuration)
+        {
+
+        }
     }
 }
