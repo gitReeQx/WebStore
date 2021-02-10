@@ -17,6 +17,8 @@ namespace WebStore.Controllers
 
         public IActionResult Index() => View();
 
+        public IActionResult Throw(string id) => throw new ApplicationException(id);
+
         public IActionResult Employees()
         {
             return View(TestData.Employees);
