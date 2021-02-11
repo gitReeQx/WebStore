@@ -1,6 +1,6 @@
 ﻿@model EmployeesViewModel
 
-@{ 
+@{
     ViewData["Title"] = $"Редактирование сотрудника id:{Model.Id}";
 }
 <div class="container">
@@ -45,8 +45,13 @@
                 <input type="submit" value="Сохранить" class="btn btn-danger" /><a asp-action="Edit"></a>
             </div>
         </div>
-        
+
     </form>
-    
+
 
 </div>
+
+@section Scripts
+{
+    <partial name="Partial/_ValidationScriptsPartial" />
+} 
