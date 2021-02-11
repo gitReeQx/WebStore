@@ -65,5 +65,43 @@ namespace WebStore.Tests.Controllers
             Assert.IsType<ViewResult>(result);
         }
 
+        [TestMethod, ExpectedException(typeof(ApplicationException))]
+        public void Throw_thrown_ApplicationException()
+        {
+            var controller = new HomeController();
+            var expected_exception_message = "Test";
+
+            var result = controller.Throw(expected_exception_message);
+        }
+
+        [TestMethod]
+        public void Throw_thrown_ApplicationException2()
+        {
+            var controller = new HomeController();
+            var expected_exception_message = "Test";
+
+            Exception actual_exception = null;
+            try
+            {
+                controller.Throw(expected_exception_message);
+            }
+            catch (Exception error)
+            {
+                actual_exception = error;
+            }
+
+            var app_exception = Assert.IsType<ApplicationException>(actual_exception);
+            Assert.Equal(expected_exception_message, app_exception.Message);
+        }
+
+        [TestMethod]
+        public void Throw_thrown_ApplicationException3()
+        {
+            var controller = new HomeController();
+            var expected_exception_message = "Test";
+
+            var actual_exception = Assert.Throws<ApplicationException>(() => controller.Throw(expected_exception_message));
+            Assert.Equal(expected_exception_message, actual_exception.Message);
+        }
     }
 }
