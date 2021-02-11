@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using WebStore.Controllers;
 using WebStore.Domain;
@@ -38,7 +39,11 @@ namespace WebStore.Tests.Controllers
                     new SectionDTO(1, $"Section of product {id}", 1, null, 1)
                     ));
 
-            var controller = new CatalogController(product_data_mock.Object);
+            var configuration_mock = new Mock<IConfiguration>();
+            configuration_mock.Setup(configuration => configuration[It.IsAny<string>()])
+               .Returns("3");
+
+            var controller = new CatalogController(product_data_mock.Object, configuration_mock.Object);
 
             #endregion
 
@@ -78,9 +83,13 @@ namespace WebStore.Tests.Controllers
             var product_data_mock = new Mock<IProductData>();
             product_data_mock
                .Setup(p => p.GetProducts(It.IsAny<ProductFilter>()))
-               .Returns(products);
+               .Returns(new PageProductsDTO(products, products.Length));
 
-            var controller = new CatalogController(product_data_mock.Object);
+            var configuration_mock = new Mock<IConfiguration>();
+            configuration_mock.Setup(configuration => configuration[It.IsAny<string>()])
+               .Returns("3");
+
+            var controller = new CatalogController(product_data_mock.Object, configuration_mock.Object);
 
             var result = controller.Shop(expected_brand_id, expected_section_id);
 
