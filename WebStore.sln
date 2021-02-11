@@ -26,11 +26,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.ServiceHosting", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Clients", "Services\WebStore.Clients\WebStore.Clients.csproj", "{6BB35E71-39D4-47C8-92E0-4B1B754C41F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.Logger", "Common\WebStore.Logger\WebStore.Logger.csproj", "{B4022F82-9E58-4124-92A1-91B2B3F990EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebStore.Logger", "Common\WebStore.Logger\WebStore.Logger.csproj", "{B4022F82-9E58-4124-92A1-91B2B3F990EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{007E73D8-77AC-4679-9DDC-AB06DB9D8337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webstore.Tests", "Tests\Webstore.Tests\Webstore.Tests.csproj", "{DA35A95A-3A45-47F4-AEA4-489F654E1D6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Webstore.Tests", "Tests\Webstore.Tests\Webstore.Tests.csproj", "{DA35A95A-3A45-47F4-AEA4-489F654E1D6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebStore.Services.Tests", "Tests\WebStore.Services.Tests\WebStore.Services.Tests.csproj", "{14A806AB-59BD-434D-AD77-CCD22D99F289}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,10 @@ Global
 		{DA35A95A-3A45-47F4-AEA4-489F654E1D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA35A95A-3A45-47F4-AEA4-489F654E1D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA35A95A-3A45-47F4-AEA4-489F654E1D6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A806AB-59BD-434D-AD77-CCD22D99F289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14A806AB-59BD-434D-AD77-CCD22D99F289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A806AB-59BD-434D-AD77-CCD22D99F289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14A806AB-59BD-434D-AD77-CCD22D99F289}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +94,7 @@ Global
 		{6BB35E71-39D4-47C8-92E0-4B1B754C41F5} = {B3CF367A-14A6-42C1-ABED-D1D0DFEA6754}
 		{B4022F82-9E58-4124-92A1-91B2B3F990EB} = {C7995BC5-9D28-4CEE-970A-18DC62F834AA}
 		{DA35A95A-3A45-47F4-AEA4-489F654E1D6F} = {007E73D8-77AC-4679-9DDC-AB06DB9D8337}
+		{14A806AB-59BD-434D-AD77-CCD22D99F289} = {007E73D8-77AC-4679-9DDC-AB06DB9D8337}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F488B6D4-D0B7-4DDE-9E21-4421D313E2A6}
