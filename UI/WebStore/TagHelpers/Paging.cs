@@ -54,7 +54,7 @@ namespace WebStore.TagHelpers
                 PageUrlValues["page"] = PageNumber;
                 a.Attributes["href"] = "#";
                 //a.Attributes["href"] = Url.Action(PageAction, PageUrlValues);
-                foreach (var (key, value) in PageUrlValues.Where(v => v.Value != null))
+                foreach (var (key, value) in PageUrlValues.Where(v => !string.IsNullOrEmpty(v.Value?.ToString())))
                     a.MergeAttribute($"data-{key}", value.ToString());
             }
 
