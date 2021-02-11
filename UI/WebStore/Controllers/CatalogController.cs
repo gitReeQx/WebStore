@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using WebStore.Domain;
@@ -10,6 +11,8 @@ namespace WebStore.Controllers
 {
     public class CatalogController : Controller
     {
+        private const string __PageSize = "CatalogPageSize";
+
         private readonly IProductData productData;
         private readonly IConfiguration _Configuration;
 
@@ -22,7 +25,7 @@ namespace WebStore.Controllers
         public IActionResult Shop(int? BrandId, int? SectionId, int Page = 1, int? PageSize = null)
         {
             var page_size = PageSize
-                ?? (int.TryParse(_Configuration["CatalogPageSize"], out var value) ? value : null);
+                ?? (int.TryParse(_Configuration[__PageSize], out var value) ? value : null);
 
             var filter = new ProductFilter
             {
@@ -48,14 +51,31 @@ namespace WebStore.Controllers
             });
         }
 
-        public IActionResult Details(int id)
-        {
-            var product = productData.GetProductById(id);
+        public IActionResult Details(int id) =>
+            productData.GetProductById(id) is { } product
+                ? View(product.FromDTO().ToView())
+                : NotFound();
 
-            if (product is null)
-                return NotFound();
+        #region WebAPI
 
-            return View(product.FromDTO().ToView());
-        }
+        public IActionResult GetFeaturedItems(int? BrandId, int? SectionId, int Page = 1, int? PageSize = null)
+            => PartialView("Partial/_FeaturesItems", GetProducts(BrandId, SectionId, Page, PageSize));
+
+        private IEnumerable<ProductViewModel> GetProducts(int? BrandId, int? SectionId, int Page, int? PageSize) =>
+            productData.GetProducts(
+                    new ProductFilter
+                    {
+                        SectionId = SectionId,
+                        BrandId = BrandId,
+                        Page = Page,
+                        PageSize = PageSize
+                            ?? (int.TryParse(_Configuration[__PageSize], out var size) ? size : null)
+                    })
+               .Products.OrderBy(p => p.Order)
+               .FromDTO()
+               .ToView();
+
+
+        #endregion
     }
 }
