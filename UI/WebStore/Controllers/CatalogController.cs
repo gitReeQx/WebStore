@@ -32,13 +32,19 @@ namespace WebStore.Controllers
                 PageSize = page_size
             };
 
-            var products = productData.GetProducts(filter);
+            var (products, total_count) = productData.GetProducts(filter);
 
             return View(new CatalogViewModel
             {
                 BrandId = BrandId,
                 SectionId = SectionId,
-                Products = products.Products.OrderBy(p => p.Order).FromDTO().ToView()
+                Products = products.OrderBy(p => p.Order).FromDTO().ToView(),
+                PageViewModel = new PageViewModel
+                {
+                    Page = Page,
+                    PageSize = page_size ?? 0,
+                    TotalItems = total_count,
+                },
             });
         }
 
