@@ -1,58 +1,76 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.AspNetCore.Mvc;
+
 using WebStore.Domain.ViewModels;
 using WebStore.Interfaces.Services;
-using WebStore.Services.Mapping;
+using WebStore.ViewModels;
 
 namespace WebStore.Components
 {
-    // [ViewComponent(Name = "Sections")] - если не наследовать класс ViewComponent
-    public class SectionsViewComponent: ViewComponent
+    //[ViewComponent(Name = "Sections")]
+    public class SectionsViewComponent : ViewComponent
     {
-        private readonly IProductData productData;
-        public SectionsViewComponent(IProductData _productData) => productData = _productData;
+        private readonly IProductData _ProductData;
 
-        // по умолчанию берется представление с именем Default
-        public IViewComponentResult Invoke()
+        public SectionsViewComponent(IProductData ProductData) => _ProductData = ProductData;
+
+        public IViewComponentResult Invoke(string SectionId)
         {
-            var sections = productData.GetSections().ToArray();
+            var section_id = int.TryParse(SectionId, out var id) ? id : (int?)null;
+
+            var sections = GetSections(section_id, out var parent_section_id);
+
+            ViewBag.SectionId = section_id;
+            ViewData["ParentSectionId"] = parent_section_id;
+
+            return View(new SelectableSectionsViewModel(sections, section_id, parent_section_id));
+        }
+
+        private IEnumerable<SectionViewModel> GetSections(int? SectionId, out int? ParentSectionId)
+        {
+            ParentSectionId = null;
+
+            var sections = _ProductData.GetSections().ToArray();
 
             var parent_sections = sections.Where(s => s.ParentId is null);
 
-            var parent_sections_views = parent_sections
-                .Select(s => new SectionViewModel
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Order = s.Order,
-                    ProductsCount = s.ProductCount
-                })
-                .ToList();
+            var parent_section_views = parent_sections
+               .Select(s => new SectionViewModel
+               {
+                   Id = s.Id,
+                   Name = s.Name,
+                   Order = s.Order,
+                   ProductsCount = s.ProductCount
+               })
+               .ToList();
 
-            foreach (var parent_section in parent_sections_views)
+            foreach (var parent_section in parent_section_views)
             {
                 var childs = sections.Where(s => s.ParentId == parent_section.Id);
 
-                foreach (var childs_section in childs)
+                foreach (var child_section in childs)
                 {
+                    if (child_section.Id == SectionId)
+                        ParentSectionId = child_section.ParentId;
+
                     parent_section.ChildSection.Add(new SectionViewModel
                     {
-                        Id = childs_section.Id,
-                        Name = childs_section.Name,
-                        Order = childs_section.Order,
+                        Id = child_section.Id,
+                        Name = child_section.Name,
+                        Order = child_section.Order,
                         ParentSection = parent_section,
-                        ProductsCount = childs_section.ProductCount
+                        ProductsCount = child_section.ProductCount
                     });
                 }
+
                 parent_section.ChildSection.Sort((a, b) => Comparer<int>.Default.Compare(a.Order, b.Order));
             }
 
-            parent_sections_views.Sort((a, b) => Comparer<int>.Default.Compare(a.Order, b.Order));
+            parent_section_views.Sort((a, b) => Comparer<int>.Default.Compare(a.Order, b.Order));
 
-            return View(parent_sections_views);
+            return parent_section_views;
         }
-
-        //public async Task<IViewComponentResult> InvokeAsync() => View(); - для асинхронного вызова
     }
 }
