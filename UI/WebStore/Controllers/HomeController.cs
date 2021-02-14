@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebStore.Domain.Models;
+using WebStore.Domain.Entities;
 using WebStore.Services.Data;
 
 namespace WebStore.Controllers
@@ -16,6 +16,8 @@ namespace WebStore.Controllers
         public HomeController(IConfiguration configuration) => _configuration = configuration;
 
         public IActionResult Index() => View();
+
+        public IActionResult Throw(string id) => throw new ApplicationException(id);
 
         public IActionResult Employees()
         {

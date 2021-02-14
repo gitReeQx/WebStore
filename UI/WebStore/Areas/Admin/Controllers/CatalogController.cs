@@ -35,7 +35,8 @@ namespace WebStore.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid) return View(_product);
 
-            productData.AddProduct(_product);
+            // Логика редактирования
+            // Логика вызова метода из IProductData
 
             return RedirectToAction(nameof(Index));
         }
@@ -50,7 +51,7 @@ namespace WebStore.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteConfirm(int id)
         {
-            productData.DeleteProduct(id);
+            // Логика удаления
 
             return RedirectToAction(nameof(Index));
         }

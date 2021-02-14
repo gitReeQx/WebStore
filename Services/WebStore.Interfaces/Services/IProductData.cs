@@ -19,9 +19,5 @@ namespace WebStore.Interfaces.Services
         IEnumerable<ProductDTO> GetProducts(ProductFilter Filter = null);
 
         ProductDTO GetProductById(int id);
-
-        void AddProduct(Product product);
-
-        bool DeleteProduct(int id);
     }
 }
